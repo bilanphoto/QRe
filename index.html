@@ -267,7 +267,10 @@
                 targetCtx.fillRect(0, 0, W, H);
 
                 if (currentBackgroundImage) {
+                    console.log('Drawing pttp.png on canvas.'); 
                     targetCtx.drawImage(currentBackgroundImage, 0, 0, W, H);
+                } else {
+                    console.log('currentBackgroundImage is null, not drawing pttp.png.'); 
                 }
             }
             
@@ -368,7 +371,7 @@
              * ฟังก์ชันสำหรับวาดรูปภาพพนักงานแต่ละคนที่เลือกจาก input type="file"
              */
             function drawEmployeeImages(targetCtx, W, H) {
-                // กรองเฉพาะรูปภาพที่ไม่ใช่ null
+                // กรองเฉพาะรูปภาพที่ไม่ใช่ null เพื่อหาจำนวนพนักงานที่ถูกเลือกจริง
                 const activeEmployeeImages = loadedEmployeeImages.filter(img => img !== null);
                 if (activeEmployeeImages.length === 0) return;
 
@@ -391,10 +394,25 @@
                 targetCtx.shadowOffsetY = 2 * PADDING_FACTOR;
                 // *** สิ้นสุดการตั้งค่าเงา ***
 
+                // วาดรูปภาพเฉพาะที่มีค่า (ไม่เป็น null)
+                loadedEmployeeImages.forEach((img, index) => {
+                    if (img) { // ตรวจสอบว่ามีรูปภาพในตำแหน่งนี้หรือไม่
+                        targetCtx.drawImage(img, currentX, startY, imgWidth, imgHeight);
+                        currentX += imgWidth + PADDING;
+                    }
+                    // ถ้า img เป็น null เราจะไม่วาดอะไร แต่ currentX จะยังคงเป็นตำแหน่งเดิม
+                    // ทำให้รูปภาพที่ตามมา (ถ้ามี) วาดทับตำแหน่งเดิม
+                    // ดังนั้น logic ที่ถูกต้องคือ ต้องนับเฉพาะ activeEmployeeImages ในการคำนวณ totalEmployeeWidth และ currentX
+                });
+
+                // การคำนวณ currentX ข้างบนผิดพลาดเล็กน้อยเมื่อมีรูปเป็น null
+                // แก้ไขโดยการวนลูปแค่ activeEmployeeImages
+                currentX = startX; // รีเซ็ต currentX
                 activeEmployeeImages.forEach(img => {
                     targetCtx.drawImage(img, currentX, startY, imgWidth, imgHeight);
                     currentX += imgWidth + PADDING;
                 });
+
 
                 // *** ล้างค่าเงาออก (สำคัญมาก) ***
                 targetCtx.shadowColor = 'transparent';
@@ -525,4 +543,15 @@
                 // *** ล้างค่าเงาออก (สำคัญมาก) ***
                 targetCtx.shadowColor = 'transparent';
                 targetCtx.shadowBlur = 0;
-                targetCtx.shadowOffsetX =
+                targetCtx.shadowOffsetX = 0;
+                targetCtx.shadowOffsetY = 0;
+                // *** สิ้นสุดการล้างค่าเงา ***
+            }
+
+
+            /**
+             * ฟังก์ชันสำหรับวาดข้อความเริ่มต้น (เมื่อไม่มีรูปภาพหลักและพนักงาน)
+             */
+            function drawInitialTextContent(targetCtx, W, H, headerHeight) {
+                targetCtx.shadowColor = 'transparent';
+                targetCtx.shadowBlur = 0;
