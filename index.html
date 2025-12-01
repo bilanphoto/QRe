@@ -60,18 +60,34 @@
         <div class="mb-8 p-4 border-b-2 border-blue-100 space-y-4">
             
             <div class="space-y-4 pb-4 border-b border-gray-100">
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0">
-                    <label for="backgroundFileInput" class="text-lg font-medium text-gray-700 whitespace-nowrap">
-                        เลือกรูปภาพพื้นหลัง (Template):
-                    </label>
-                    <input type="file" id="backgroundFileInput" accept="image/*" class="block w-full sm:w-auto text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100 cursor-pointer">
-                </div>
-                
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0 pt-4">
                     <label for="fileInput" class="text-lg font-medium text-gray-700 whitespace-nowrap">
-                        เลือกรูปภาพหลัก (แสดงด้านหน้า):
+                        เลือกรูปรายงาน:
                     </label>
                     <input type="file" id="fileInput" accept="image/*" multiple class="block w-full sm:w-auto text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
+                    <div class="flex flex-col space-y-1">
+                        <label for="employeeFileInput1" class="text-lg font-medium text-gray-700 whitespace-nowrap">พนง.1 :</label>
+                        <input type="file" id="employeeFileInput1" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer">
+                    </div>
+                    <div class="flex flex-col space-y-1">
+                        <label for="employeeFileInput2" class="text-lg font-medium text-gray-700 whitespace-nowrap">พนง.2 :</label>
+                        <input type="file" id="employeeFileInput2" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer">
+                    </div>
+                    <div class="flex flex-col space-y-1">
+                        <label for="employeeFileInput3" class="text-lg font-medium text-gray-700 whitespace-nowrap">พนง.3 :</label>
+                        <input type="file" id="employeeFileInput3" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer">
+                    </div>
+                    <div class="flex flex-col space-y-1">
+                        <label for="employeeFileInput4" class="text-lg font-medium text-gray-700 whitespace-nowrap">พนง.4 :</label>
+                        <input type="file" id="employeeFileInput4" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer">
+                    </div>
+                    <div class="flex flex-col space-y-1">
+                        <label for="employeeFileInput5" class="text-lg font-medium text-gray-700 whitespace-nowrap">พนง.5 :</label>
+                        <input type="file" id="employeeFileInput5" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer">
+                    </div>
                 </div>
             </div>
 
@@ -145,28 +161,44 @@
             const DRAW_LINE_WIDTH_FACTOR = 4; 
             // EXPORT_SCALE_FACTOR (2.5) คือการเพิ่มความละเอียดของภาพรวม 2.5 เท่า
             const EXPORT_SCALE_FACTOR = 2.5; 
-            const HEADER_FONT_SIZE = 11;
+            const HEADER_FONT_SIZE_TITLE = 20; // Operations report - 20px
+            const HEADER_FONT_SIZE_OTHER = 16; // Area, Title job, SAP No., Date - 16px
             const EXTERNAL_H_PADDING_FACTOR = 15;
-            // FONT_EXPORT_BOOST_FACTOR (1.5) คือการเพิ่มขนาด Font ขึ้นอีก 1.5 เท่า จากขนาดที่ถูก Scale ขึ้นไปแล้ว
             const FONT_EXPORT_BOOST_FACTOR = 1.5; 
-            // ขนาดฟอนต์สำหรับเครื่องมือวาดข้อความ
             const TEXT_DRAWING_FONT_SIZE = 18;
+
+            // กำหนด Path รูปภาพพื้นหลัง PTT และขนาดรูปพนักงาน
+            const PTT_BACKGROUND_IMAGE_PATH = 'pttp.png'; 
+            const EMPLOYEE_DISPLAY_WIDTH_CM = 2; // 2cm
+            const EMPLOYEE_DISPLAY_HEIGHT_CM = 3; // 3cm
+            const DPI = 96; // Standard DPI for screen
+            // แปลง cm เป็น px สำหรับการแสดงผลบน Canvas
+            // PADDING_FACTOR จะถูกใช้เพื่อปรับขนาดใน redrawContent และ exportHighResolution
+            const EMPLOYEE_DISPLAY_WIDTH_PX = EMPLOYEE_DISPLAY_WIDTH_CM * DPI / 2.54; 
+            const EMPLOYEE_DISPLAY_HEIGHT_PX = EMPLOYEE_DISPLAY_HEIGHT_CM * DPI / 2.54; 
+
             
             // Elements
-            const backgroundFileInput = document.getElementById('backgroundFileInput');
             const fileInput = document.getElementById('fileInput');
+            // อ้างอิงถึง input files ของพนักงานทั้ง 5 คน
+            const employeeFileInputs = [
+                document.getElementById('employeeFileInput1'),
+                document.getElementById('employeeFileInput2'),
+                document.getElementById('employeeFileInput3'),
+                document.getElementById('employeeFileInput4'),
+                document.getElementById('employeeFileInput5')
+            ];
+
             const areaInput = document.getElementById('areaInput'); 
             const titleJopInput = document.getElementById('titleJopInput'); 
             const sapNoInput = document.getElementById('sapNoInput'); 
             const dateInput = document.getElementById('dateInput');
             const textDrawingInput = document.getElementById('textDrawingInput'); 
             const saveButton = document.getElementById('saveButton'); 
-            // (แก้ไขเพิ่มเติม: รับ Element ปุ่ม Undo)
             const btnUndo = document.getElementById('btnUndo'); 
             const saveButtonContent = document.getElementById('saveButtonContent'); 
             const canvasContainer = document.getElementById('canvasContainer');
             const canvas = document.getElementById('imageCanvas');
-            // รับ Context 2D ของ Canvas
             const ctx = canvas.getContext('2d'); 
             const statusMessage = document.getElementById('statusMessage');
 
@@ -177,8 +209,10 @@
             const modeText = document.getElementById('modeText');
 
             // State Management
-            let loadedImages = []; // รูปภาพหลัก (Foreground)
-            let currentBackgroundImage = null; // รูปภาพพื้นหลัง (Background)
+            let loadedImages = []; // รูปภาพหลัก (Foreground) ที่อัปโหลดจาก fileInput
+            let currentBackgroundImage = null; // รูปภาพพื้นหลัง PTT
+            // เปลี่ยน loadedEmployeeImages เป็น Array ที่มีขนาด 5 เพื่อเก็บรูปภาพของพนักงานแต่ละคน
+            let loadedEmployeeImages = new Array(5).fill(null); 
             let drawingMode = 'RECT'; 
             let shapes = []; 
             let isDrawing = false;
@@ -226,16 +260,13 @@
             }
 
             /**
-             * ฟังก์ชันสำหรับวาดพื้นหลัง (ใช้สีพื้นเรียบ หรือรูปภาพที่อัปโหลด)
+             * ฟังก์ชันสำหรับวาดพื้นหลัง (รูปภาพ PTT)
              */
             function drawBackground(targetCtx, W, H) {
-                // 1. วาดสีพื้นฐาน
                 targetCtx.fillStyle = BACKGROUND_COLOR; 
                 targetCtx.fillRect(0, 0, W, H);
 
-                // 2. ถ้ามีรูปภาพพื้นหลังที่โหลดสำเร็จ ให้นำมาวาดทับ
                 if (currentBackgroundImage) {
-                    // วาดรูปภาพพื้นหลังให้เต็ม Canvas (ยืดตามสัดส่วน 3:2 ของ Canvas)
                     targetCtx.drawImage(currentBackgroundImage, 0, 0, W, H);
                 }
             }
@@ -246,7 +277,6 @@
             function formatDate(dateStr) {
                 if (!dateStr) return 'N/A';
                 const parts = dateStr.split('-');
-                // ตรวจสอบว่าเป็นรูปแบบ YYYY-MM-DD ที่ถูกต้องหรือไม่
                 if (parts.length === 3 && !isNaN(parseInt(parts[0]))) {
                     return `${parts[2]}/${parts[1]}/${parts[0]}`; 
                 }
@@ -255,7 +285,7 @@
 
 
             /**
-             * ฟังก์ชันสำหรับวาดข้อความ Header ที่จัดเรียงชิดซ้าย
+             * ฟังก์ชันสำหรับวาดข้อความ Header ที่จัดเรียงชิดซ้าย/ขวา
              */
             function drawHeaderText(targetCtx, W, H) {
                 const area = areaInput.value || 'N/A';
@@ -264,17 +294,17 @@
                 const dateValue = formatDate(dateInput.value); 
 
                 const PADDING = 10 * PADDING_FACTOR;
-                
-                // ใช้ FONT_EXPORT_BOOST_FACTOR เมื่อกำลัง Export 
                 const FONT_BOOST = PADDING_FACTOR > 1 ? FONT_EXPORT_BOOST_FACTOR : 1; 
 
-                const FONT_SIZE = HEADER_FONT_SIZE * PADDING_FACTOR * FONT_BOOST;
-                const BIG_FONT_SIZE = FONT_SIZE * 1.5; 
+                const FONT_SIZE_TITLE_PX = HEADER_FONT_SIZE_TITLE * PADDING_FACTOR * FONT_BOOST;
+                const FONT_SIZE_OTHER_PX = HEADER_FONT_SIZE_OTHER * PADDING_FACTOR * FONT_BOOST; 
                 
-                const LINE_HEIGHT = FONT_SIZE * 1.5; 
+                const LINE_HEIGHT_TITLE = FONT_SIZE_TITLE_PX * 1.1; 
+                const LINE_HEIGHT_OTHER = FONT_SIZE_OTHER_PX * 1.5; 
                 
                 const topPadding = PADDING;
                 const leftPadding = PADDING; 
+                const rightPadding = PADDING; 
                 
                 targetCtx.textBaseline = 'top'; 
                 targetCtx.fillStyle = '#1f2937'; 
@@ -283,34 +313,46 @@
                 targetCtx.shadowOffsetX = 1 * PADDING_FACTOR;
                 targetCtx.shadowOffsetY = 1 * PADDING_FACTOR;
 
-                const leftX = leftPadding; 
                 let currentY = topPadding;
-                targetCtx.textAlign = 'left'; 
-
-                // --- 1. Operations Report (บรรทัดแรก ด้านซ้าย - BIG FONT) ---
-                targetCtx.font = `bold ${BIG_FONT_SIZE}px Inter, sans-serif`;
-                targetCtx.fillText('Operations report', leftX, currentY); 
-                currentY += BIG_FONT_SIZE * 1.1; // เลื่อนลง
                 
+                // --- 1. Operations Report (บรรทัดแรก ด้านขวา - BIG FONT) ---
+                targetCtx.font = `bold ${FONT_SIZE_TITLE_PX}px Inter, sans-serif`;
+                targetCtx.textAlign = 'right'; 
+                targetCtx.fillText('Operations report', W - rightPadding, currentY); 
+                
+                // คำนวณ Y สำหรับกลุ่มข้อความถัดไป โดยพิจารณาจากตำแหน่งสูงสุดที่อาจมีรูปพนักงาน
+                // เราต้องหาจำนวนพนักงานที่ถูกเลือกเพื่อคำนวณความสูง
+                const numActiveEmployees = loadedEmployeeImages.filter(img => img !== null).length;
+                const employeeBlockHeight = numActiveEmployees > 0 ? (EMPLOYEE_DISPLAY_HEIGHT_PX * PADDING_FACTOR * FONT_BOOST) + PADDING : 0;
+                
+                // เพื่อให้มั่นใจว่าข้อความ "Area" ไม่ทับกับ "Operations report" หรือรูปพนักงาน
+                // เราจะเริ่มวาดข้อความอื่นๆ ที่ต่ำกว่า Operation Report หรือใต้รูปพนักงาน (ถ้ามี)
+                currentY = Math.max(currentY + LINE_HEIGHT_TITLE, topPadding + employeeBlockHeight);
+
+
+                // เปลี่ยนกลับมาจัดชิดซ้ายสำหรับข้อความอื่นๆ
+                targetCtx.textAlign = 'left'; 
+                const leftX = leftPadding; 
+
                 // --- 2. Area (NORMAL FONT) ---
-                targetCtx.font = `bold ${FONT_SIZE}px Inter, sans-serif`;
+                targetCtx.font = `bold ${FONT_SIZE_OTHER_PX}px Inter, sans-serif`;
                 targetCtx.fillText(`Area : ${area}`, leftX, currentY); 
-                currentY += LINE_HEIGHT; 
+                currentY += LINE_HEIGHT_OTHER; 
                 
                 // --- 3. Title job (NORMAL FONT) ---
-                targetCtx.font = `bold ${FONT_SIZE}px Inter, sans-serif`;
+                targetCtx.font = `bold ${FONT_SIZE_OTHER_PX}px Inter, sans-serif`;
                 targetCtx.fillText(`Title job : ${titleJop}`, leftX, currentY); 
-                currentY += LINE_HEIGHT; 
+                currentY += LINE_HEIGHT_OTHER; 
                 
                 // --- 4. SAP No. (NORMAL FONT) ---
-                targetCtx.font = `bold ${FONT_SIZE}px Inter, sans-serif`;
+                targetCtx.font = `bold ${FONT_SIZE_OTHER_PX}px Inter, sans-serif`;
                 targetCtx.fillText(`SAP : ${sapNo}`, leftX, currentY); 
-                currentY += LINE_HEIGHT; // เลื่อนลง
+                currentY += LINE_HEIGHT_OTHER; 
                 
                 // --- 5. Date (ใต้ SAP No. ทันที - NORMAL FONT) ---
-                targetCtx.font = `bold ${FONT_SIZE}px Inter, sans-serif`;
+                targetCtx.font = `bold ${FONT_SIZE_OTHER_PX}px Inter, sans-serif`;
                 targetCtx.fillText(`Date: ${dateValue}`, leftX, currentY); 
-                currentY += LINE_HEIGHT; // เลื่อนลง
+                currentY += LINE_HEIGHT_OTHER; 
 
                 
                 // Clear shadow settings
@@ -319,9 +361,49 @@
                 targetCtx.shadowOffsetX = 0;
                 targetCtx.shadowOffsetY = 0;
 
-                // ส่งกลับค่า Y ที่ต่ำที่สุดของบล็อกข้อมูลเหนือรูปภาพ + PADDING
-                return currentY + PADDING;
+                return currentY + PADDING; // ส่งคืนตำแหน่ง Y ถัดไป
             }
+
+            /**
+             * ฟังก์ชันสำหรับวาดรูปภาพพนักงานแต่ละคนที่เลือกจาก input type="file"
+             */
+            function drawEmployeeImages(targetCtx, W, H) {
+                // กรองเฉพาะรูปภาพที่ไม่ใช่ null
+                const activeEmployeeImages = loadedEmployeeImages.filter(img => img !== null);
+                if (activeEmployeeImages.length === 0) return;
+
+                const PADDING = 10 * PADDING_FACTOR; 
+                const FONT_BOOST = PADDING_FACTOR > 1 ? FONT_EXPORT_BOOST_FACTOR : 1; 
+
+                const imgWidth = EMPLOYEE_DISPLAY_WIDTH_PX * PADDING_FACTOR * FONT_BOOST;
+                const imgHeight = EMPLOYEE_DISPLAY_HEIGHT_PX * PADDING_FACTOR * FONT_BOOST;
+
+                const totalEmployeeWidth = (imgWidth * activeEmployeeImages.length) + (PADDING * (activeEmployeeImages.length - 1));
+                const startX = W - totalEmployeeWidth - PADDING; // ชิดขวา
+                const startY = PADDING; // ด้านบน
+
+                let currentX = startX;
+
+                // *** เริ่มการตั้งค่าเงาสำหรับรูปภาพพนักงาน ***
+                targetCtx.shadowColor = 'rgba(0, 0, 0, 0.4)'; 
+                targetCtx.shadowBlur = 6 * PADDING_FACTOR; 
+                targetCtx.shadowOffsetX = 2 * PADDING_FACTOR;
+                targetCtx.shadowOffsetY = 2 * PADDING_FACTOR;
+                // *** สิ้นสุดการตั้งค่าเงา ***
+
+                activeEmployeeImages.forEach(img => {
+                    targetCtx.drawImage(img, currentX, startY, imgWidth, imgHeight);
+                    currentX += imgWidth + PADDING;
+                });
+
+                // *** ล้างค่าเงาออก (สำคัญมาก) ***
+                targetCtx.shadowColor = 'transparent';
+                targetCtx.shadowBlur = 0;
+                targetCtx.shadowOffsetX = 0;
+                targetCtx.shadowOffsetY = 0;
+                // *** สิ้นสุดการล้างค่าเงา ***
+            }
+
 
             /**
              * ฟังก์ชันสำหรับวาดรูปวาดทั้งหมด
@@ -331,11 +413,8 @@
             function drawAllShapes(targetCtx, W) {
                 const shapesToDraw = [...shapes, ...(currentShape ? [currentShape] : [])];
                 
-                // ใช้ความกว้างของ Canvas ปัจจุบัน (W) หารด้วยความกว้างของ Canvas ที่บันทึกพิกัด (canvas.width) 
-                // เพื่อให้ได้ Scale Factor ที่ถูกต้องสำหรับการวาด (เมื่อ Export จะเท่ากับ 2.5)
                 const scale = canvas.width > 0 ? W / canvas.width : 1; 
 
-                // Text specific scaling for drawing shapes
                 const FONT_BOOST = PADDING_FACTOR > 1 ? FONT_EXPORT_BOOST_FACTOR : 1; 
                 const BASE_FONT_SIZE = TEXT_DRAWING_FONT_SIZE * PADDING_FACTOR * FONT_BOOST;
 
@@ -347,7 +426,6 @@
                         targetCtx.lineWidth = DRAW_LINE_WIDTH_FACTOR * scale; 
                         targetCtx.lineCap = 'round';
                         
-                        // Scale coordinates
                         const x1 = shape.x1 * scale;
                         const y1 = shape.y1 * scale;
                         const x2 = shape.x2 * scale;
@@ -359,13 +437,11 @@
                         if (shape.type === 'RECT') {
                             targetCtx.strokeRect(x1, y1, w, h);
                         } else if (shape.type === 'CIRCLE') {
-                            // คำนวณรัศมีจากจุดเริ่มต้นและจุดสิ้นสุด
                             const dx = x2 - x1;
                             const dy = y2 - y1;
                             const radius = Math.sqrt(dx * dx + dy * dy); 
                             
                             targetCtx.beginPath();
-                            // วาดวงกลมจากจุดเริ่มต้น (x1, y1) ด้วยรัศมีที่คำนวณได้
                             targetCtx.arc(x1, y1, radius, 0, Math.PI * 2); 
                             targetCtx.stroke();
                         } else if (shape.type === 'ARROW') {
@@ -376,14 +452,11 @@
                             drawArrowhead(targetCtx, x1, y1, x2, y2);
                         }
                     } else if (shape.type === 'TEXT') {
-                        // TEXT Drawing Logic
                         targetCtx.fillStyle = shape.color;
                         targetCtx.textAlign = 'left';
-                        // ใช้ 'top' เพื่อให้พิกัด y เป็นจุดเริ่มต้นของข้อความ
                         targetCtx.textBaseline = 'top'; 
                         targetCtx.font = `bold ${BASE_FONT_SIZE}px Inter, sans-serif`;
                         
-                        // Scale coordinates
                         const x = shape.x * scale;
                         const y = shape.y * scale;
 
@@ -431,10 +504,10 @@
                 let currentX = startX; 
 
                 // *** เริ่มการตั้งค่าเงาสำหรับรูปภาพ ***
-                targetCtx.shadowColor = 'rgba(0, 0, 0, 0.4)'; // สีเงาดำโปร่งแสง
-                targetCtx.shadowBlur = 10 * PADDING_FACTOR; // ความฟุ้งของเงา (ปรับอัตโนมัติ)
-                targetCtx.shadowOffsetX = 3 * PADDING_FACTOR; // เงาด้านขวา (ปรับอัตโนมัติ)
-                targetCtx.shadowOffsetY = 3 * PADDING_FACTOR; // เงาด้านล่าง (ปรับอัตโนมัติ)
+                targetCtx.shadowColor = 'rgba(0, 0, 0, 0.4)'; 
+                targetCtx.shadowBlur = 10 * PADDING_FACTOR; 
+                targetCtx.shadowOffsetX = 3 * PADDING_FACTOR;
+                targetCtx.shadowOffsetY = 3 * PADDING_FACTOR;
                 // *** สิ้นสุดการตั้งค่าเงาสำหรับรูปภาพ ***
 
 
@@ -452,331 +525,4 @@
                 // *** ล้างค่าเงาออก (สำคัญมาก) ***
                 targetCtx.shadowColor = 'transparent';
                 targetCtx.shadowBlur = 0;
-                targetCtx.shadowOffsetX = 0;
-                targetCtx.shadowOffsetY = 0;
-                // *** สิ้นสุดการล้างค่าเงา ***
-            }
-
-
-            /**
-             * ฟังก์ชันสำหรับวาดข้อความเริ่มต้น (เมื่อไม่มีรูปภาพหลัก)
-             */
-            function drawInitialTextContent(targetCtx, W, H, headerHeight) {
-                // อย่าลืมล้าง Shadow ที่อาจค้างมาจาก Header Text
-                targetCtx.shadowColor = 'transparent';
-                targetCtx.shadowBlur = 0;
-
-                // ใช้ FONT_EXPORT_BOOST_FACTOR เมื่อกำลัง Export (PADDING_FACTOR > 1 คือ 2.5)
-                const FONT_BOOST = PADDING_FACTOR > 1 ? FONT_EXPORT_BOOST_FACTOR : 1;
-                const BASE_FONT_SIZE = 24; 
-                const INITIAL_FONT_SIZE = BASE_FONT_SIZE * PADDING_FACTOR * FONT_BOOST; 
-
-                targetCtx.fillStyle = '#1f2937'; 
-                targetCtx.font = `${INITIAL_FONT_SIZE}px Inter, sans-serif`;
-                targetCtx.textAlign = 'center';
-                targetCtx.textBaseline = 'middle';
-                
-                // พื้นที่วาดรูปภาพ: ตั้งแต่ใต้ Header จนถึงขอบ Canvas ด้านล่าง
-                const imageAreaHeight = H - headerHeight; 
-                const centerY = headerHeight + (imageAreaHeight / 2);
-
-                if (loadedImages.length === 0) {
-                    targetCtx.fillText('เลือกรูปภาพหลักเพื่อจัดเรียงในแนวนอน', W / 2, centerY);
-                }
-            }
-
-
-            /**
-             * **ฟังก์ชันหลักที่ใช้ในการวาดเนื้อหาทั้งหมด**
-             */
-            function redrawContent(targetCtx, W, H) {
-                // 1. วาดพื้นหลัง (ใช้สีพื้นเรียบ หรือรูปภาพที่อัปโหลด)
-                drawBackground(targetCtx, W, H); 
-                
-                // 2. วาดข้อความ Header และรับค่าความสูงของ Header block
-                // H ถูกส่งผ่านเพื่อให้ drawHeaderText สามารถจัดวาง Date ไว้ที่ล่างสุดได้
-                const finalHeaderY = drawHeaderText(targetCtx, W, H); 
-
-
-                if (loadedImages.length === 0) {
-                    // วาดข้อความเริ่มต้นเมื่อไม่มีรูปภาพหลัก
-                    drawInitialTextContent(targetCtx, W, H, finalHeaderY); 
-                    drawAllShapes(targetCtx, W); 
-                    return;
-                }
-                
-                // 3. กำหนดพื้นที่สำหรับรูปภาพ
-                const PADDING = 10 * PADDING_FACTOR; 
-                const imageAreaStartY = finalHeaderY;
-                
-                // ความสูงของพื้นที่วาดรูปภาพ คือตั้งแต่จุดสิ้นสุดของ Header จนถึงขอบ Canvas ด้านล่าง
-                const imageAreaH = H - imageAreaStartY; 
-                // Target height คือความสูงของรูปภาพหลัก โดยลบ Padding ออกจากด้านบนและด้านล่าง
-                const targetHeight = imageAreaH - (2 * PADDING); 
-
-                if (targetHeight <= 0) {
-                    console.warn("Not enough space for images after accounting for header.");
-                    drawAllShapes(targetCtx, W); 
-                    return;
-                }
-                
-                // 4. วาดรูปภาพในพื้นที่ที่กำหนด (พร้อมใส่เงา)
-                drawForegroundImages(targetCtx, W, imageAreaStartY, imageAreaH, targetHeight);
-
-                // 5. วาดรูปวาดทั้งหมดทับรูปภาพ
-                drawAllShapes(targetCtx, W); 
-            }
-
-
-            /**
-             * ฟังก์ชันสำหรับวาด Canvas ที่แสดงผลบนหน้าจอ
-             */
-            function redrawVisibleCanvas() {
-                // ตรวจสอบความถูกต้องของ Canvas Context ก่อนวาด
-                if (!ctx) return; 
-
-                const W = canvasContainer.clientWidth;
-                const H = W * ASPECT_RATIO;
-                
-                canvas.width = W;
-                canvas.height = H;
-                
-                window.PADDING_FACTOR = 1;
-                
-                redrawContent(ctx, W, H);
-            }
-
-            
-            /**
-             * ล้างรูปวาดทั้งหมด
-             */
-            window.clearShapes = function() { // เปลี่ยนเป็น Global function เพื่อให้เรียกใช้จาก onclick ได้
-                shapes = [];
-                currentShape = null;
-                redrawVisibleCanvas();
-            }
-
-            /**
-             * (แก้ไขเพิ่มเติม: ฟังก์ชันสำหรับ Undo รูปวาดล่าสุด)
-             */
-            function undoLastShape() {
-                if (shapes.length > 0) {
-                    shapes.pop(); // ลบ element สุดท้ายออกจาก array
-                    redrawVisibleCanvas(); // วาดใหม่
-                }
-            }
-
-
-            /**
-             * **ฟังก์ชันส่งออกภาพด้วยความละเอียดสูง: เปิดในแท็บใหม่เพื่อให้ผู้ใช้บันทึกเอง**
-             */
-            function exportHighResolution() {
-                // 1. ปิดปุ่มและแสดง Loading
-                saveButton.disabled = true;
-                saveButtonContent.innerHTML = `<div class="loader"></div> Processing...`;
-                
-                // ใช้ setTimeout เพื่อให้เบราว์เซอร์มีเวลาอัพเดต UI (แสดง Loading Spinner) ก่อนเริ่มงานหนัก
-                setTimeout(() => {
-                    try {
-                        // 2. กำหนดขนาดใหม่สำหรับ High-Resolution
-                        const originalW = canvas.width;
-                        const exportW = originalW * EXPORT_SCALE_FACTOR;
-                        const exportH = exportW * ASPECT_RATIO; 
-
-                        // 3. สร้าง Canvas ชั่วคราว (Off-screen canvas)
-                        const tempCanvas = document.createElement('canvas');
-                        tempCanvas.width = exportW;
-                        tempCanvas.height = exportH;
-                        const tempCtx = tempCanvas.getContext('2d');
-                        
-                        // 4. ปรับ PADDING_FACTOR ให้เป็นสเกลของภาพส่งออก
-                        window.PADDING_FACTOR = EXPORT_SCALE_FACTOR;
-
-                        // 5. วาดเนื้อหาทั้งหมดลงบน Canvas ชั่วคราวด้วยขนาดใหม่
-                        redrawContent(tempCtx, exportW, exportH);
-                        
-                        // 6. ใช้ toDataURL เพื่อดึงข้อมูลภาพในรูปแบบ PNG
-                        const dataURL = tempCanvas.toDataURL('image/png');
-                        
-                        // 7. สร้างชื่อไฟล์ที่สื่อความหมาย
-                        const sanitize = (str) => (str || '').replace(/[^a-z0-9\u0E00-\u0E7F]/gi, '_'); 
-                        const area = sanitize(areaInput.value);
-                        const titleJop = sanitize(titleJopInput.value);
-                        const sapNo = sanitize(sapNoInput.value);
-                        const date = formatDate(dateInput.value) || new Date().toISOString().slice(0, 10);
-                        const fileName = `Report_${area}_${titleJop}_${sapNo}_${date}.png`;
-
-                        // 8. เปิดภาพในหน้าต่างใหม่ (วิธีที่เสถียรที่สุดในการ "เปิด" รูปภาพ)
-                        const newWindow = window.open(dataURL, '_blank');
-                        
-                        if (newWindow) {
-                            // ตั้งชื่อแท็บเป็นชื่อไฟล์เพื่อความสะดวกในการบันทึก
-                            newWindow.document.title = fileName; 
-                            
-                            // Fallback สำหรับกรณีที่เบราว์เซอร์เปิดแท็บใหม่ได้
-                        } else {
-                            // Fallback: ถ้าเบราว์เซอร์บล็อก Popup ให้พยายามดาวน์โหลดโดยตรง 
-                            const downloadLink = document.createElement('a');
-                            downloadLink.href = dataURL;
-                            downloadLink.download = fileName; 
-                            document.body.appendChild(downloadLink);
-                            downloadLink.click();
-                            document.body.removeChild(downloadLink);
-                            console.error("Popup was blocked. Initiating direct download.");
-                        }
-
-                    } catch (error) {
-                        console.error("High-resolution export failed:", error);
-                        // แสดงข้อผิดพลาดใน Console แทนการแจ้งเตือน
-                    } finally {
-                        // 9. คืนค่า PADDING_FACTOR และ UI
-                        window.PADDING_FACTOR = 1; 
-                        redrawVisibleCanvas(); 
-                        saveButton.disabled = false;
-                        saveButtonContent.innerHTML = `💾 Save Report (PNG)`;
-                    }
-                }, 100); // รอ 100ms ก่อนเริ่ม process
-            }
-
-            // --- Event Listeners ---
-
-            // 1. File Inputs
-            backgroundFileInput.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (!file) {
-                    currentBackgroundImage = null;
-                    redrawVisibleCanvas();
-                    return;
-                }
-                const img = new Image();
-                img.onload = () => {
-                    currentBackgroundImage = img;
-                    redrawVisibleCanvas();
-                };
-                img.src = URL.createObjectURL(file);
-            });
-
-            fileInput.addEventListener('change', (e) => {
-                loadedImages = []; // Clear previous images
-                statusMessage.classList.add('hidden');
-                const files = Array.from(e.target.files);
-                if (files.length === 0) {
-                    redrawVisibleCanvas();
-                    return;
-                }
-
-                let loadedCount = 0;
-                files.forEach(file => {
-                    const img = new Image();
-                    img.onload = () => {
-                        loadedImages.push(img);
-                        loadedCount++;
-                        if (loadedCount === files.length) {
-                            // All images loaded
-                            redrawVisibleCanvas();
-                        }
-                    };
-                    img.src = URL.createObjectURL(file);
-                });
-            });
-
-            // 2. Text Inputs (Redraw on change)
-            [areaInput, titleJopInput, sapNoInput, dateInput].forEach(input => {
-                input.addEventListener('input', redrawVisibleCanvas);
-            });
-
-            // 3. Drawing Mode Selection
-            function setDrawingMode(mode) {
-                drawingMode = mode;
-                // Update UI: Remove 'active' from all, add to current
-                [modeRect, modeCircle, modeArrow, modeText].forEach(btn => btn.classList.remove('active'));
-                if (mode === 'RECT') modeRect.classList.add('active');
-                else if (mode === 'CIRCLE') modeCircle.classList.add('active');
-                else if (mode === 'ARROW') modeArrow.classList.add('active');
-                else if (mode === 'TEXT') modeText.classList.add('active');
-
-                // Show/Hide text input
-                if (mode === 'TEXT') {
-                    textDrawingInput.classList.remove('hidden');
-                    textDrawingInput.focus();
-                } else {
-                    textDrawingInput.classList.add('hidden');
-                }
-            }
-
-            modeRect.addEventListener('click', () => setDrawingMode('RECT'));
-            modeCircle.addEventListener('click', () => setDrawingMode('CIRCLE'));
-            modeArrow.addEventListener('click', () => setDrawingMode('ARROW'));
-            modeText.addEventListener('click', () => setDrawingMode('TEXT'));
-
-
-            // 4. Canvas Drawing Interactions
-            function startDrawing(e) {
-                isDrawing = true;
-                const pos = getCanvasPosition(e);
-                startX = pos.x;
-                startY = pos.y;
-
-                if (drawingMode === 'TEXT') {
-                    const text = textDrawingInput.value.trim();
-                    if (text) {
-                        shapes.push({ type: 'TEXT', x: startX, y: startY, text: text, color: DRAW_COLOR });
-                        textDrawingInput.value = ''; // Clear input
-                        redrawVisibleCanvas();
-                    }
-                    isDrawing = false; // Text is one-click, not drag
-                }
-            }
-
-            function draw(e) {
-                if (!isDrawing) return;
-                const pos = getCanvasPosition(e);
-                const currentX = pos.x;
-                const currentY = pos.y;
-
-                currentShape = {
-                    type: drawingMode,
-                    x1: startX,
-                    y1: startY,
-                    x2: currentX,
-                    y2: currentY,
-                    color: DRAW_COLOR
-                };
-                redrawVisibleCanvas();
-            }
-
-            function stopDrawing(e) {
-                if (!isDrawing) return;
-                isDrawing = false;
-                if (currentShape) {
-                    shapes.push(currentShape);
-                    currentShape = null;
-                }
-                redrawVisibleCanvas();
-            }
-
-            // Mouse Events
-            canvas.addEventListener('mousedown', startDrawing);
-            canvas.addEventListener('mousemove', draw);
-            canvas.addEventListener('mouseup', stopDrawing);
-            canvas.addEventListener('mouseout', stopDrawing);
-
-            // Touch Events (for mobile)
-            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e); }, { passive: false });
-            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); }, { passive: false });
-            canvas.addEventListener('touchend', (e) => { e.preventDefault(); stopDrawing(e); }, { passive: false });
-
-            // 5. Save Button & Undo Button
-            saveButton.addEventListener('click', exportHighResolution);
-            // (แก้ไขเพิ่มเติม: เพิ่ม Event Listener ให้ปุ่ม Undo)
-            btnUndo.addEventListener('click', undoLastShape); 
-
-            // 6. Window Resize
-            window.addEventListener('resize', redrawVisibleCanvas);
-
-            // Initial Draw
-            redrawVisibleCanvas();
-        });
-    </script>
-</body>
-</html>
+                targetCtx.shadowOffsetX =
